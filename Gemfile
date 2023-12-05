@@ -26,6 +26,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 # gem 'rack-cors'
 
 gem 'devise', '~> 4.9', '>= 4.9.3'
+gem 'paranoia', '~> 2.6', '>= 2.6.3'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
