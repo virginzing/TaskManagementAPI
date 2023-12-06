@@ -18,7 +18,7 @@ class Tasks::UndoService < ApplicationService
 
     Tasks::Changelogs::PopService.call(task)
 
-    task.save
+    task.save!
 
     SUCCESS(task)
   end

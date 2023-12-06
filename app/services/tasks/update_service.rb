@@ -18,7 +18,7 @@ class Tasks::UpdateService < ApplicationService
 
     Tasks::Changelogs::AddService.call(user, task, task.changes)
 
-    task.save
+    task.save!
 
     SUCCESS(task)
   end

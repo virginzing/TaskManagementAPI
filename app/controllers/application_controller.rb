@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::API
   attr_reader :current_user
 
   def authenticate_user
-    token = request.headers['Authorization']
+    token = request.headers['AuthenticationToken']
 
     user = User.find_by_email(token)
 
@@ -12,6 +14,8 @@ class ApplicationController < ActionController::API
   end
 
   def response_error(message)
-    render json: { errors: message }, status: :unprocessable_entity
+    errors = message.is_a?(Array) ? message.join("\n") : message
+
+    render json: { errors: errors }, status: :unprocessable_entity
   end
 end

@@ -13,6 +13,8 @@ class Tasks::CreateService < ApplicationService
   def call
     @task = Task.new(params.merge({ created_by: user }))
 
+    @task.assign_attributes(changelogs: []) if Rails.env.test?
+
     now = DateTime.now
 
     Tasks::Changelogs::AddService.call(user, task,
@@ -25,7 +27,7 @@ class Tasks::CreateService < ApplicationService
 
     return FAILED(task) if task.invalid?
 
-    task.save
+    task.save!
 
     SUCCESS(task)
   end
