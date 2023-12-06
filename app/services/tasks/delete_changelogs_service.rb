@@ -8,8 +8,11 @@ class Tasks::DeleteChangelogsService < ApplicationService
   end
 
   def call
-    task.changelogs.pop
     logs = task.changelogs
+
+    return if logs.empty?
+
+    logs.pop
 
     task.update!(changelogs: logs)
   end

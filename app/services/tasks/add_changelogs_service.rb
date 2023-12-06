@@ -10,6 +10,8 @@ class Tasks::AddChangelogsService < ApplicationService
   end
 
   def call
+    return if changes.empty?
+
     logs = task.changelogs.append(previous_changes)
 
     task.update!(changelogs: logs)
