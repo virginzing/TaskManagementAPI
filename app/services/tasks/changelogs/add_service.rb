@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Tasks::AddChangelogsService < ApplicationService
+class Tasks::Changelogs::AddService < ApplicationService
   attr_reader :task
   attr_reader :changes
 

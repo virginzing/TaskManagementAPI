@@ -12,7 +12,7 @@ class Tasks::UndoService < ApplicationService
 
     task.update!(task.changelogs.last)
 
-    Tasks::DeleteChangelogsService.call(task)
+    Tasks::Changelogs::PopService.call(task)
 
     task.save
 

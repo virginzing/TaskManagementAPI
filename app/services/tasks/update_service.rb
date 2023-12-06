@@ -14,7 +14,7 @@ class Tasks::UpdateService < ApplicationService
 
     return task if task.invalid?
 
-    Tasks::AddChangelogsService.call(task, task.changes)
+    Tasks::Changelogs::AddService.call(task, task.changes)
 
     task.save
 

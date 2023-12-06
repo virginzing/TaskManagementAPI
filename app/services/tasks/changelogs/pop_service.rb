@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Tasks::DeleteChangelogsService < ApplicationService
+class Tasks::Changelogs::PopService < ApplicationService
   attr_reader :task
 
   def initialize(task)

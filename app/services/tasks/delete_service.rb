@@ -10,7 +10,7 @@ class Tasks::DeleteService < ApplicationService
   def call
     return task if task.deleted?
 
-    Tasks::AddChangelogsService.call(task, { deleted_at: nil })
+    Tasks::Changelogs::AddService.call(task, { deleted_at: nil })
 
     task.delete
 
