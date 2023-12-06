@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_12_05_111312) do
+ActiveRecord::Schema.define(version: 2023_12_05_133558) do
 
   create_table "tasks", force: :cascade do |t|
     t.string "title"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2023_12_05_111312) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"
+    t.json "changelogs", default: []
     t.index ["created_by_id"], name: "index_tasks_on_created_by_id"
     t.index ["deleted_at"], name: "index_tasks_on_deleted_at"
     t.index ["last_updated_by_id"], name: "index_tasks_on_last_updated_by_id"
