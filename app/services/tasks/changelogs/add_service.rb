@@ -16,8 +16,7 @@ class Tasks::Changelogs::AddService < ApplicationService
 
     logs = task.changelogs.append(previous_changes)
 
-    task.assign_attributes(last_updated_by: user)
-    task.update!(changelogs: logs)
+    task.assign_attributes(last_updated_by: user, changelogs: logs)
   end
 
   private
@@ -28,8 +27,15 @@ class Tasks::Changelogs::AddService < ApplicationService
       updated_at: task.updated_at
     }.merge(
       changes
-        .map { |key, value| { key => value&.first } }
+        .map { |key, value| { key => previous_data(value) } }
         .reduce(&:merge)
     )
+  end
+
+  def previous_data(value)
+    return nil if value.nil?
+    return value.first if value.is_a?(Array)
+
+    value
   end
 end
