@@ -10,12 +10,12 @@ class Tasks::DeleteService < ApplicationService
   end
 
   def call
-    return task if task.deleted?
+    return FAILED(task) if task.deleted?
 
     Tasks::Changelogs::AddService.call(user, task, { deleted_at: nil })
 
     task.delete
 
-    task
+    SUCCESS(task)
   end
 end

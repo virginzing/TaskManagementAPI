@@ -23,10 +23,10 @@ class Tasks::CreateService < ApplicationService
       }
     )
 
-    return task if task.invalid?
+    return FAILED(task) if task.invalid?
 
     task.save
 
-    task
+    SUCCESS(task)
   end
 end

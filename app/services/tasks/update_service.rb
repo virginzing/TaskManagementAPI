@@ -14,12 +14,12 @@ class Tasks::UpdateService < ApplicationService
   def call
     task.assign_attributes(params)
 
-    return task if task.invalid?
+    return FAILED(task) if task.invalid?
 
     Tasks::Changelogs::AddService.call(user, task, task.changes)
 
     task.save
 
-    task
+    SUCCESS(task)
   end
 end

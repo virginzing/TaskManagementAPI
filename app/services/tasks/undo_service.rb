@@ -8,7 +8,11 @@ class Tasks::UndoService < ApplicationService
   end
 
   def call
-    return task if task.changelogs.empty?
+    if task.changelogs.empty?
+      task.errors.add(:changelogs, 'is empty')
+
+      return FAILED(task)
+    end
 
     task.assign_attributes(task.changelogs.last)
 
@@ -16,6 +20,6 @@ class Tasks::UndoService < ApplicationService
 
     task.save
 
-    task
+    SUCCESS(task)
   end
 end

@@ -1,5 +1,7 @@
 class TasksController < ApplicationController
+  before_action :authenticate_user
   before_action :set_task, only: [:show, :update, :destroy]
+  before_action :set_undo_task, only: [:undo]
 
   # GET /tasks
   def index
@@ -15,33 +17,60 @@ class TasksController < ApplicationController
 
   # POST /tasks
   def create
-    @task = Task.new(task_params)
+    result = Tasks::CreateService.call(current_user, task_params)
 
-    if @task.save
-      render json: @task, status: :created, location: @task
+    if result[:success]
+      render json: result[:value]
     else
-      render json: @task.errors, status: :unprocessable_entity
+      response_error(result[:value].errors.full_messages)
     end
   end
 
   # PATCH/PUT /tasks/1
   def update
-    if @task.update(task_params)
-      render json: @task
+    result = Tasks::UpdateService.call(current_user, @task, task_params)
+
+    if result[:success]
+      render json: result[:value]
     else
-      render json: @task.errors, status: :unprocessable_entity
+      response_error(result[:value].errors.full_messages)
     end
   end
 
   # DELETE /tasks/1
   def destroy
-    @task.destroy
+    result = Tasks::DeleteService.call(current_user, @task)
+
+    if result[:success]
+      render json: result[:value]
+    else
+      response_error(result[:value].errors.full_messages)
+    end
+  end
+
+  # POST /tasks/1/undo
+  def undo
+    result = Tasks::UndoService.call(@task)
+
+    if result[:success]
+      render json: result[:value]
+    else
+      response_error(result[:value].errors.full_messages)
+    end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task
-      @task = Task.find(params[:id])
+      @task = Task.find_by_id(params[:id])
+
+      return response_error("Task id: #{params[:id]} not found.") unless @task
+    end
+
+    def set_undo_task
+      @task = Task.unscoped.find_by_id(params[:id])
+
+      return response_error("Task id: #{params[:id]} not found.") unless @task
     end
 
     # Only allow a list of trusted parameters through.
