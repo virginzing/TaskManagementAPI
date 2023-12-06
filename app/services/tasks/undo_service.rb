@@ -10,7 +10,7 @@ class Tasks::UndoService < ApplicationService
   def call
     return task if task.changelogs.empty?
 
-    task.update!(task.changelogs.last)
+    task.assign_attributes(task.changelogs.last)
 
     Tasks::Changelogs::PopService.call(task)
 
