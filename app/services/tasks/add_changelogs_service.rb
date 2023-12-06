@@ -18,9 +18,10 @@ class Tasks::AddChangelogsService < ApplicationService
   private
 
   def previous_changes
-    changes
-      .map { |key, value| { key => value.first } }
-      .reduce(&:merge)
-      .merge(updated_at: task.updated_at)
+    { updated_at: task.updated_at }.merge(
+      changes
+        .map { |key, value| { key => value&.first } }
+        .reduce(&:merge)
+    )
   end
 end
