@@ -1,0 +1,250 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/tasks":
+    get:
+      summary: List all tasks
+      tags:
+      - Tasks
+      parameters:
+      - name: AuthenticationToken
+        in: header
+        schema:
+          type: string
+      responses:
+        '200':
+          description: list of tasks
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/tasks_response"
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/errors_response"
+    post:
+      summary: Creates a task
+      tags:
+      - Tasks
+      parameters:
+      - name: AuthenticationToken
+        in: header
+        schema:
+          type: string
+      responses:
+        '200':
+          description: task created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/task_response"
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/errors_response"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                due_date:
+                  type: string
+                status:
+                  type: string
+              required:
+              - title
+  "/tasks/{id}":
+    get:
+      summary: Get task :id
+      tags:
+      - Tasks
+      parameters:
+      - name: AuthenticationToken
+        in: header
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: task data
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/task_response"
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/errors_response"
+    put:
+      summary: Update task :id
+      tags:
+      - Tasks
+      parameters:
+      - name: AuthenticationToken
+        in: header
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: task updated
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/task_response"
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/errors_response"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                due_date:
+                  type: string
+                status:
+                  type: string
+              required:
+              - title
+    delete:
+      summary: Delete task :id
+      tags:
+      - Tasks
+      parameters:
+      - name: AuthenticationToken
+        in: header
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: task deleted
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/task_response"
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/errors_response"
+  "/tasks/{id}/undo":
+    post:
+      summary: Undo task :id
+      tags:
+      - Tasks
+      parameters:
+      - name: AuthenticationToken
+        in: header
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: task undo
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/task_response"
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/errors_response"
+servers:
+- url: "{defaultHost}"
+  variables:
+    defaultHost:
+      default: http://localhost:3000
+components:
+  schemas:
+    tasks_response:
+      type: array
+      items:
+        "$ref": "#/components/schemas/task_response"
+    task_response:
+      type: object
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        due_date:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        created_by:
+          type: object
+          properties:
+            id:
+              type: number
+            email:
+              type: string
+        last_updated_by:
+          type: object
+          properties:
+            id:
+              type: number
+            email:
+              type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        deleted_at:
+          type: string
+          nullable: true
+        changelogs:
+          type: array
+          items:
+            type: object
+    errors_response:
+      type: object
+      properties:
+        errors:
+          type: string
